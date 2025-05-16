@@ -1,0 +1,1 @@
+# quickstarter-dotnet-kafka-consumer-template
