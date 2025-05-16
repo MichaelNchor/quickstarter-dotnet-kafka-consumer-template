@@ -1,7 +1,5 @@
 /.idea/
 
 # Build artifacts
-/src/Kafka.Consumer/bin/
-/src/Kafka.Consumer/obj/
-/tests/Kafka.Consumer.Tests/bin/
-/tests/Kafka.Consumer.Tests/obj/
+**/obj/
+**/bin/
