@@ -1,9 +1,21 @@
-﻿namespace Kafka.Consumer;
+﻿using Kafka.Consumer.Extensions;
+using Kafka.Consumer.Services;
+
+namespace Kafka.Consumer;
 
 class Program
 {
-    static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        using var host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) =>
+            {
+                services
+                    .AddKafkaConsumer(context.Configuration)
+                    .AddOpenSearch(context.Configuration);
+            })
+            .Build();
+        
+        await host.RunAsync();
     }
 }
