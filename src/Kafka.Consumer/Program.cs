@@ -1,7 +1,4 @@
-﻿using Kafka.Consumer.Extensions;
-using Kafka.Consumer.Services;
-
-namespace Kafka.Consumer;
+﻿namespace Kafka.Consumer;
 
 class Program
 {

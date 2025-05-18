@@ -1,5 +1,16 @@
 global using System.ComponentModel.DataAnnotations;
+global using System.Reflection;
+global using Confluent.Kafka;
 global using Kafka.Consumer.Options;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
+global using Kafka.Consumer.Extensions;
+global using Kafka.Consumer.Helpers;
+global using Kafka.Consumer.Models;
+global using Kafka.Consumer.Services;
+global using Kafka.Consumer.Services.Interface;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
+global using Nest;
+global using Newtonsoft.Json;
