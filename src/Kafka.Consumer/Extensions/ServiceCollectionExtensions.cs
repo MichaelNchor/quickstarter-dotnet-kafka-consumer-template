@@ -1,5 +1,4 @@
-using Kafka.Consumer.Services;
-using Nest;
+using Kafka.Consumer.Services.Provider;
 
 namespace Kafka.Consumer.Extensions;
 
@@ -12,7 +11,8 @@ public static class ServiceCollectionExtensions
             .Bind(configuration.GetSection(nameof(KafkaConfig)))
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        services.AddHostedService<KafkaConsumerService>();
+        services.AddHostedService<BackgroundRunner>();
+        services.AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<KafkaMessage>>();
         return services;
     }
     
@@ -29,6 +29,6 @@ public static class ServiceCollectionExtensions
         return services
             .Configure<OpenSearchConfig>(section)
             .AddSingleton<IElasticClient>(elasticClient)
-            .AddSingleton<IElasticClientService, ElasticClientService>();
+            .AddSingleton<IElasticClientService, ElasticRepository>();
     }
 }
