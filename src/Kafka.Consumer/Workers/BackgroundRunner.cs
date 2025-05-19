@@ -6,8 +6,8 @@ public class BackgroundRunner(ILogger<BackgroundRunner> logger, IKafkaConsumerSe
     {
         logger.LogInformation("Service started at {timestamp}", DateTime.UtcNow);
         
-        // Start the KafkaConsumer consumer
-        await kafkaConsumerService.StartConsumer(ctx);
+        // Consume the Kafka consumer
+        await kafkaConsumerService.Consume(ctx);
     }
 
     public override Task StopAsync(CancellationToken ctx)

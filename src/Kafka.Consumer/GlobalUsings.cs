@@ -7,7 +7,6 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Kafka.Consumer.Helpers;
 global using Kafka.Consumer.Models;
-global using Kafka.Consumer.Services;
 global using Kafka.Consumer.Services.Interface;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
