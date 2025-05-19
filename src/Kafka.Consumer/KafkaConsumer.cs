@@ -2,9 +2,9 @@
 
 namespace Kafka.Consumer;
 
-public class Kafka(ILogger<Kafka> logger, IElasticClientService elasticClientService) : KafkaBase
+public class KafkaConsumer(ILogger<KafkaConsumer> logger, IElasticRepository elasticRepository) : KafkaConsumerBase
 {
-    [Consumer(Type = typeof(IOptions<KafkaConsumerConfig>), Topics = nameof(KafkaConsumerConfig.TopicsAsSingleString))]
+    [Consume(Type = typeof(IOptions<KafkaConsumerConfig>), Topics = nameof(KafkaConsumerConfig.TopicsAsSingleString))]
     private async Task HandleKafkaMessages(List<KafkaMessage> messages)
     {
         logger.LogInformation("Received message => {message} @ {timestamp}",  JsonConvert.SerializeObject(messages), DateTime.UtcNow);
@@ -14,7 +14,7 @@ public class Kafka(ILogger<Kafka> logger, IElasticClientService elasticClientSer
             logger.LogInformation("Processed message: {message} @ {timestamp}", message, DateTime.UtcNow);
             try
             {
-                await elasticClientService.Add(message, CancellationToken.None);
+                await elasticRepository.Add(message, CancellationToken.None);
             }
             catch (Exception ex)
             {

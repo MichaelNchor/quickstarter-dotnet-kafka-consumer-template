@@ -1,6 +1,6 @@
 namespace Kafka.Consumer.Models;
 
-public record BaseModel
+public record BaseEntity
 {
     public string Id { get; } = Guid.NewGuid().ToString("N");
     public DateTime CreatedAt { get; } = DateTime.UtcNow;
