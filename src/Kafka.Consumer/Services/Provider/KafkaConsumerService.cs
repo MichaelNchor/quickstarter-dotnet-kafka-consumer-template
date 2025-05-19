@@ -1,15 +1,15 @@
 namespace Kafka.Consumer.Services.Provider;
 
-public class KafkaConsumerLogic<T> : IKafkaConsumerLogic where T : class
+public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
 {
-    private readonly ILogger<KafkaConsumerLogic<T>> _logger;
+    private readonly ILogger<KafkaConsumerService<T>> _logger;
     private readonly IConsumer<Null, string> _consumer;
     private readonly KafkaConsumerConfig _kafkaConsumerConfig;
     private readonly List<ConsumeResult<Null, string>> _buffer = [];
     private DateTime _lastFlushTime = DateTime.UtcNow;
     private readonly IServiceProvider _serviceProvider;
-    public KafkaConsumerLogic(
-        ILogger<KafkaConsumerLogic<T>> logger,
+    public KafkaConsumerService(
+        ILogger<KafkaConsumerService<T>> logger,
         IOptions<KafkaConfig> kafkaConfig,
         IServiceProvider serviceProvider)
     {
@@ -48,12 +48,12 @@ public class KafkaConsumerLogic<T> : IKafkaConsumerLogic where T : class
                 if (_buffer.Count >= _kafkaConsumerConfig.BatchSize || 
                     timeSinceLastFlush > TimeSpan.FromSeconds(_kafkaConsumerConfig.BatchIntervalInSeconds))
                 {
-                    // Initialize the Kafka and Context
-                    ILogger<Kafka> logger = _serviceProvider.GetRequiredService<ILogger<Kafka>>();
+                    // Initialize the KafkaConsumer and Context
+                    ILogger<KafkaConsumer> logger = _serviceProvider.GetRequiredService<ILogger<KafkaConsumer>>();
                     
                     // Initialize the ElasticRepository
-                    IElasticClientService elasticClientService = _serviceProvider.GetRequiredService<IElasticClientService>();
-                    Kafka consumer = new Kafka(logger,elasticClientService);
+                    IElasticRepository elasticRepository = _serviceProvider.GetRequiredService<IElasticRepository>();
+                    KafkaConsumer consumer = new KafkaConsumer(logger,elasticRepository);
                     consumer.Context = new KafkaContext(_buffer, _kafkaConsumerConfig.BootstrapServers);
                     
                     // deserialize the messages
@@ -64,10 +64,10 @@ public class KafkaConsumerLogic<T> : IKafkaConsumerLogic where T : class
                             JsonConvert.SerializeObject(_buffer), DateTime.UtcNow);
                         continue;
                     }
-                    // Use reflection to find methods with the ConsumerAttribute
-                    var methods = typeof(Kafka)
+                    // Use reflection to find methods with the ConsumeAttribute
+                    var methods = typeof(KafkaConsumer)
                         .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
-                        .Where(m => m.GetCustomAttribute<ConsumerAttribute>() != null);
+                        .Where(m => m.GetCustomAttribute<ConsumeAttribute>() != null);
                     
                     // Call each method with the buffer
                     foreach (var method in methods)

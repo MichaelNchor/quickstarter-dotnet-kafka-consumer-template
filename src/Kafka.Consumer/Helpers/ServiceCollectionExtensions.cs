@@ -1,6 +1,7 @@
 using Kafka.Consumer.Services.Provider;
+using Kafka.Consumer.Workers;
 
-namespace Kafka.Consumer.Extensions;
+namespace Kafka.Consumer.Helpers;
 
 public static class ServiceCollectionExtensions
 {
@@ -12,7 +13,7 @@ public static class ServiceCollectionExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
         services.AddHostedService<BackgroundRunner>();
-        services.AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<KafkaMessage>>();
+        services.AddSingleton<IKafkaConsumerService, KafkaConsumerService<KafkaMessage>>();
         return services;
     }
     
@@ -29,6 +30,6 @@ public static class ServiceCollectionExtensions
         return services
             .Configure<OpenSearchConfig>(section)
             .AddSingleton<IElasticClient>(elasticClient)
-            .AddSingleton<IElasticClientService, ElasticRepository>();
+            .AddSingleton<IElasticRepository, ElasticRepository>();
     }
 }

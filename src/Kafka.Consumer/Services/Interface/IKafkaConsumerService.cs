@@ -1,6 +1,6 @@
 namespace Kafka.Consumer.Services.Interface;
 
-public interface IKafkaConsumerLogic
+public interface IKafkaConsumerService
 {
     Task StartConsumer(CancellationToken ctx);
 }
