@@ -29,7 +29,7 @@ public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
         _serviceProvider = serviceProvider;
     }
     
-    public async Task StartConsumer(CancellationToken ctx)
+    public async Task Consume(CancellationToken ctx)
     {
         _logger.LogInformation("Consumer started at {timestamp}", DateTime.UtcNow);
         while (!ctx.IsCancellationRequested)
@@ -48,48 +48,7 @@ public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
                 if (_buffer.Count >= _kafkaConsumerConfig.BatchSize || 
                     timeSinceLastFlush > TimeSpan.FromSeconds(_kafkaConsumerConfig.BatchIntervalInSeconds))
                 {
-                    // Initialize the KafkaConsumer and Context
-                    ILogger<KafkaConsumer> logger = _serviceProvider.GetRequiredService<ILogger<KafkaConsumer>>();
-                    
-                    // Initialize the ElasticRepository
-                    IElasticRepository elasticRepository = _serviceProvider.GetRequiredService<IElasticRepository>();
-                    KafkaConsumer consumer = new KafkaConsumer(logger,elasticRepository);
-                    consumer.Context = new KafkaContext(_buffer, _kafkaConsumerConfig.BootstrapServers);
-                    
-                    // deserialize the messages
-                    List<T>? deserializedMessages = _buffer.ConvertBufferListToType<T>();
-                    if (deserializedMessages == null)
-                    {
-                        _logger.LogError("Deserializing messages: {messages} failed @ {timestamp}", 
-                            JsonConvert.SerializeObject(_buffer), DateTime.UtcNow);
-                        continue;
-                    }
-                    // Use reflection to find methods with the ConsumeAttribute
-                    var methods = typeof(KafkaConsumer)
-                        .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
-                        .Where(m => m.GetCustomAttribute<ConsumeAttribute>() != null);
-                    
-                    // Call each method with the buffer
-                    foreach (var method in methods)
-                    {
-                        // Check if the method has a single parameter of type List<T>
-                        var parameters = method.GetParameters();
-                        if (parameters.Length == 1 && parameters[0].ParameterType == typeof(List<T>))
-                        {
-                            // Invoke the method with the deserialized messages
-                            var task = (Task)method.Invoke(consumer, [deserializedMessages ?? []])!;
-                            await task;
-                            _lastFlushTime = DateTime.UtcNow; 
-                            _logger.LogInformation("Consumed Message: {message} to topic: {topic} @ {timestamp}",
-                                JsonConvert.SerializeObject(consumeResult.Message), consumeResult.Topic, DateTime.UtcNow);
-                        }
-                        else
-                        {
-                            _logger.LogWarning("Method {methodName} does not match the expected signature @ {timestamp}", 
-                                method.Name, DateTime.UtcNow);
-                        }
-                    }
-                    _buffer.Clear();
+                    await ProcessBufferAndFlush(consumeResult);
                 }
             }
             catch (ConsumeException e)
@@ -102,5 +61,51 @@ public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
         }
         _consumer.Close();
         _logger.LogInformation("Consumer stopped @ {timestamp}", DateTime.UtcNow);
+    }
+
+    private async Task ProcessBufferAndFlush(ConsumeResult<Null, string> consumeResult)
+    {
+        // Initialize the KafkaConsumer and Context
+        ILogger<KafkaConsumer> logger = _serviceProvider.GetRequiredService<ILogger<KafkaConsumer>>();
+                    
+        // Initialize the ElasticRepository
+        IElasticRepository elasticRepository = _serviceProvider.GetRequiredService<IElasticRepository>();
+        KafkaConsumer consumer = new KafkaConsumer(logger,elasticRepository);
+        consumer.Context = new KafkaContext(_buffer, _kafkaConsumerConfig.BootstrapServers);
+                    
+        // deserialize the messages
+        List<T>? deserializedMessages = _buffer.ConvertBufferListToType<T>();
+        if (deserializedMessages == null)
+        {
+            _logger.LogError("Deserializing messages: {messages} failed @ {timestamp}", 
+                JsonConvert.SerializeObject(_buffer), DateTime.UtcNow);
+            return;
+        }
+        // Use reflection to find methods with the ConsumeAttribute
+        var methods = typeof(KafkaConsumer)
+            .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
+            .Where(m => m.GetCustomAttribute<ConsumeAttribute>() != null);
+                    
+        // Call each method with the buffer
+        foreach (var method in methods)
+        {
+            // Check if the method has a single parameter of type List<T>
+            var parameters = method.GetParameters();
+            if (parameters.Length == 1 && parameters[0].ParameterType == typeof(List<T>))
+            {
+                // Invoke the method with the deserialized messages
+                var task = (Task)method.Invoke(consumer, [deserializedMessages ?? []])!;
+                await task;
+                _lastFlushTime = DateTime.UtcNow; 
+                _logger.LogInformation("Consumed Message: {message} to topic: {topic} @ {timestamp}",
+                    JsonConvert.SerializeObject(consumeResult.Message), consumeResult.Topic, DateTime.UtcNow);
+            }
+            else
+            {
+                _logger.LogWarning("Method {methodName} does not match the expected signature @ {timestamp}", 
+                    method.Name, DateTime.UtcNow);
+            }
+        }
+        _buffer.Clear();
     }
 }
