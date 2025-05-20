@@ -12,8 +12,10 @@ public static class ServiceCollectionExtensions
             .Bind(configuration.GetSection(nameof(KafkaConfig)))
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        services.AddHostedService<BackgroundRunner>();
-        services.AddSingleton<IKafkaConsumerService, KafkaConsumerService<KafkaMessage>>();
+        services
+            .AddHostedService<BackgroundRunner>()
+            .AddSingleton<KafkaConsumer>()
+            .AddSingleton<IKafkaConsumerService, KafkaConsumerService<KafkaMessage>>();
         return services;
     }
     
@@ -23,13 +25,11 @@ public static class ServiceCollectionExtensions
         var openSearchConfig = section.Get<OpenSearchConfig>();
         if (openSearchConfig is null)
             throw new InvalidOperationException("Failed to bind OpenSearch configuration. Check 'OpenSearchConfig' section in appsettings.");
-        services.AddSingleton<IElasticClient, ElasticClient>();
         var settings = new ConnectionSettings(new Uri(openSearchConfig.Uri))
             .DefaultIndex(openSearchConfig.IndexName);
-        var elasticClient = new ElasticClient(settings);
         return services
             .Configure<OpenSearchConfig>(section)
-            .AddSingleton<IElasticClient>(elasticClient)
-            .AddSingleton<IElasticRepository, ElasticRepository>();
+            .AddSingleton<IElasticClient>(new ElasticClient(settings))
+            .AddTransient(typeof(IElasticRepository<>), typeof(ElasticRepository<>));
     }
 }

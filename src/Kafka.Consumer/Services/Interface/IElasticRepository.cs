@@ -1,6 +1,6 @@
 namespace Kafka.Consumer.Services.Interface;
 
-public interface IElasticRepository
+public interface IElasticRepository<in T> where T : class
 {
-    Task Add<T>(T message, CancellationToken ctx) where T : BaseEntity;
+    Task Add(T message, CancellationToken ctx);
 }

@@ -1,13 +1,16 @@
+using System.Linq.Expressions;
+
 namespace Kafka.Consumer.Services.Provider;
 
-public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
+public class KafkaConsumerService<T> : IKafkaConsumerService, IDisposable where T : class
 {
     private readonly ILogger<KafkaConsumerService<T>> _logger;
     private readonly IConsumer<Null, string> _consumer;
     private readonly KafkaConsumerConfig _kafkaConsumerConfig;
-    private readonly List<ConsumeResult<Null, string>> _buffer = [];
+    private readonly List<ConsumeResult<Null, string>> _messageBuffer = [];
     private DateTime _lastFlushTime = DateTime.UtcNow;
     private readonly IServiceProvider _serviceProvider;
+    private readonly List<Func<KafkaConsumer, List<T>, Task>> _methodsWithConsumeAttribute;
     public KafkaConsumerService(
         ILogger<KafkaConsumerService<T>> logger,
         IOptions<KafkaConfig> kafkaConfig,
@@ -27,9 +30,10 @@ public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
         _consumer.Subscribe(kafkaConsumerConfig.Topics);
         _kafkaConsumerConfig = kafkaConfig.Value.Consumer;
         _serviceProvider = serviceProvider;
+        _methodsWithConsumeAttribute = GetMethodsWithConsumeAttribute();
     }
     
-    public async Task Consume(CancellationToken ctx)
+    public async Task StartConsumingAsync(CancellationToken ctx)
     {
         _logger.LogInformation("Consumer started at {timestamp}", DateTime.UtcNow);
         while (!ctx.IsCancellationRequested)
@@ -41,19 +45,20 @@ public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
                 if (consumeResult?.Message?.Value == null) continue;
                 
                 //add consume result to buffer
-                _buffer.Add(consumeResult);
-                
+                _messageBuffer.Add(consumeResult);
+
                 // Flush the buffer if it reaches a certain size or after a certain time
                 TimeSpan timeSinceLastFlush = DateTime.UtcNow - _lastFlushTime;
-                if (_buffer.Count >= _kafkaConsumerConfig.BatchSize || 
+                if (_messageBuffer.Count >= _kafkaConsumerConfig.BatchSize ||
                     timeSinceLastFlush > TimeSpan.FromSeconds(_kafkaConsumerConfig.BatchIntervalInSeconds))
                 {
-                    await ProcessBufferAndFlush(consumeResult);
+                    // Process the batch
+                    await ProcessBatchAsync(consumeResult);
                 }
             }
             catch (ConsumeException e)
             {
-                _logger.LogError("Error consuming message: {Error} @ {timestamp}", 
+                _logger.LogError("Error consuming message: {Error} @ {timestamp}",
                     e.Error.Reason, DateTime.UtcNow);
                 break;
             }
@@ -63,49 +68,61 @@ public class KafkaConsumerService<T> : IKafkaConsumerService where T : class
         _logger.LogInformation("Consumer stopped @ {timestamp}", DateTime.UtcNow);
     }
 
-    private async Task ProcessBufferAndFlush(ConsumeResult<Null, string> consumeResult)
+    private async Task ProcessBatchAsync(ConsumeResult<Null, string> consumeResult)
     {
         // Initialize the KafkaConsumer and Context
-        ILogger<KafkaConsumer> logger = _serviceProvider.GetRequiredService<ILogger<KafkaConsumer>>();
-                    
-        // Initialize the ElasticRepository
-        IElasticRepository elasticRepository = _serviceProvider.GetRequiredService<IElasticRepository>();
-        KafkaConsumer consumer = new KafkaConsumer(logger,elasticRepository);
-        consumer.Context = new KafkaContext(_buffer, _kafkaConsumerConfig.BootstrapServers);
+        IServiceScope scope = _serviceProvider.CreateScope();
+        KafkaConsumer consumer = scope.ServiceProvider.GetRequiredService<KafkaConsumer>();
+        consumer.Context = new KafkaContext(_messageBuffer, _kafkaConsumerConfig.BootstrapServers);
                     
         // deserialize the messages
-        List<T>? deserializedMessages = _buffer.ConvertBufferListToType<T>();
+        List<T>? deserializedMessages = _messageBuffer.ConvertBufferListToType<T>();
         if (deserializedMessages == null)
         {
             _logger.LogError("Deserializing messages: {messages} failed @ {timestamp}", 
-                JsonConvert.SerializeObject(_buffer), DateTime.UtcNow);
+                JsonConvert.SerializeObject(_messageBuffer), DateTime.UtcNow);
             return;
         }
-        // Use reflection to find methods with the ConsumeAttribute
-        var methods = typeof(KafkaConsumer)
-            .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
-            .Where(m => m.GetCustomAttribute<ConsumeAttribute>() != null);
                     
         // Call each method with the buffer
-        foreach (var method in methods)
+        foreach (var method in _methodsWithConsumeAttribute)
         {
-            // Check if the method has a single parameter of type List<T>
-            var parameters = method.GetParameters();
-            if (parameters.Length == 1 && parameters[0].ParameterType == typeof(List<T>))
-            {
-                // Invoke the method with the deserialized messages
-                var task = (Task)method.Invoke(consumer, [deserializedMessages ?? []])!;
-                await task;
-                _lastFlushTime = DateTime.UtcNow; 
-                _logger.LogInformation("Consumed Message: {message} to topic: {topic} @ {timestamp}",
-                    JsonConvert.SerializeObject(consumeResult.Message), consumeResult.Topic, DateTime.UtcNow);
-            }
-            else
-            {
-                _logger.LogWarning("Method {methodName} does not match the expected signature @ {timestamp}", 
-                    method.Name, DateTime.UtcNow);
-            }
+            // Invoke the method with the deserialized messages
+            await method(consumer, deserializedMessages);
+            _lastFlushTime = DateTime.UtcNow; 
+            _logger.LogInformation("Consumed Message: {message} to topic: {topic} @ {timestamp}",
+                JsonConvert.SerializeObject(consumeResult.Message), consumeResult.Topic, DateTime.UtcNow);
         }
-        _buffer.Clear();
+        _messageBuffer.Clear();
+    }
+    
+    private static List<Func<KafkaConsumer, List<T>, Task>> GetMethodsWithConsumeAttribute()
+    {
+        var handlers = new List<Func<KafkaConsumer, List<T>, Task>>();
+        List<MethodInfo> consumeMethodInfos = typeof(KafkaConsumer)
+            .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
+            .Where(m => m.GetCustomAttribute<ConsumeAttribute>() != null 
+                        && m.GetParameters().Length == 1 
+                        && m.GetParameters()[0].ParameterType == typeof(List<T>))
+            .ToList();
+        
+        foreach (var methodInfo in consumeMethodInfos)
+        {
+            ParameterExpression consumerParameter = Expression.Parameter(typeof(KafkaConsumer), "consumer");
+            ParameterExpression messagesParameter = Expression.Parameter(typeof(List<T>), "messages");
+            MethodCallExpression methodCall = Expression.Call(consumerParameter, methodInfo, messagesParameter);
+            Expression<Func<KafkaConsumer,List<T>,Task>> lambdaExpression = Expression.Lambda<Func<KafkaConsumer, List<T>, Task>>(
+                methodCall, consumerParameter, messagesParameter);
+            handlers.Add(lambdaExpression.Compile());
+        }
+        
+        return handlers;
+    }
+    
+    public void Dispose()
+    {
+        _logger.LogInformation("Disposing KafkaConsumerService<{type}> synchronously", typeof(T).Name);
+        _consumer.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
