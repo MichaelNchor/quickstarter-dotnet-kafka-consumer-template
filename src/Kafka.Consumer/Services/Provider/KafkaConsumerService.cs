@@ -10,7 +10,7 @@ public class KafkaConsumerService<T> : IKafkaConsumerService, IDisposable where 
     private readonly List<ConsumeResult<Null, string>> _messageBuffer = [];
     private DateTime _lastFlushTime = DateTime.UtcNow;
     private readonly IServiceProvider _serviceProvider;
-    private readonly List<Func<KafkaConsumer, List<T>, Task>> _methodsWithConsumeAttribute;
+    private readonly List<Func<KafkaConsumer, List<T>, Task>> _cacheConsumeHandlers;
     public KafkaConsumerService(
         ILogger<KafkaConsumerService<T>> logger,
         IOptions<KafkaConfig> kafkaConfig,
@@ -30,7 +30,7 @@ public class KafkaConsumerService<T> : IKafkaConsumerService, IDisposable where 
         _consumer.Subscribe(kafkaConsumerConfig.Topics);
         _kafkaConsumerConfig = kafkaConfig.Value.Consumer;
         _serviceProvider = serviceProvider;
-        _methodsWithConsumeAttribute = GetMethodsWithConsumeAttribute();
+        _cacheConsumeHandlers = CacheConsumeHandlers();
     }
     
     public async Task StartConsumingAsync(CancellationToken ctx)
@@ -85,7 +85,7 @@ public class KafkaConsumerService<T> : IKafkaConsumerService, IDisposable where 
         }
                     
         // Call each method with the buffer
-        foreach (var method in _methodsWithConsumeAttribute)
+        foreach (var method in _cacheConsumeHandlers)
         {
             // Invoke the method with the deserialized messages
             await method(consumer, deserializedMessages);
@@ -96,7 +96,7 @@ public class KafkaConsumerService<T> : IKafkaConsumerService, IDisposable where 
         _messageBuffer.Clear();
     }
     
-    private static List<Func<KafkaConsumer, List<T>, Task>> GetMethodsWithConsumeAttribute()
+    private static List<Func<KafkaConsumer, List<T>, Task>> CacheConsumeHandlers()
     {
         var handlers = new List<Func<KafkaConsumer, List<T>, Task>>();
         List<MethodInfo> consumeMethodInfos = typeof(KafkaConsumer)
