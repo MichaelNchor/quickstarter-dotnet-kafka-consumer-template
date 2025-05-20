@@ -108,11 +108,11 @@ public class KafkaConsumerService<T> : IKafkaConsumerService, IDisposable where 
         
         foreach (var methodInfo in consumeMethodInfos)
         {
-            ParameterExpression comsumerParameter = Expression.Parameter(typeof(KafkaConsumer), "consumer");
+            ParameterExpression consumerParameter = Expression.Parameter(typeof(KafkaConsumer), "consumer");
             ParameterExpression messagesParameter = Expression.Parameter(typeof(List<T>), "messages");
-            MethodCallExpression methodCall = Expression.Call(comsumerParameter, methodInfo, messagesParameter);
+            MethodCallExpression methodCall = Expression.Call(consumerParameter, methodInfo, messagesParameter);
             Expression<Func<KafkaConsumer,List<T>,Task>> lambdaExpression = Expression.Lambda<Func<KafkaConsumer, List<T>, Task>>(
-                methodCall, comsumerParameter, messagesParameter);
+                methodCall, consumerParameter, messagesParameter);
             handlers.Add(lambdaExpression.Compile());
         }
         
