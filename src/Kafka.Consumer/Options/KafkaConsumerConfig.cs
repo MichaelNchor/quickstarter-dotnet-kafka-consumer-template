@@ -2,8 +2,6 @@ namespace Kafka.Consumer.Options;
 
 public class KafkaConsumerConfig
 {
-    [Required] 
-    [MinLength(1, ErrorMessage = "At least one topic is required.")]
     public required IEnumerable<string> Topics { get; init; }
     public string TopicsAsSingleString => string.Join(",", Topics);
     [Required]

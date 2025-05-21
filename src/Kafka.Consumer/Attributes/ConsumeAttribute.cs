@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Helpers;
+namespace Kafka.Consumer.Attributes;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
 public class ConsumeAttribute : Attribute

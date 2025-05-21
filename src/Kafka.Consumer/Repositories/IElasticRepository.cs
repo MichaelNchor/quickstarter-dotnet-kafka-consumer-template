@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Services.Interface;
+namespace Kafka.Consumer.Repositories;
 
 public interface IElasticRepository<in T> where T : class
 {

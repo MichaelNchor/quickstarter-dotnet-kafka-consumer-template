@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Services.Interface;
+namespace Kafka.Consumer.Services;
 
 public interface IKafkaConsumerLogic
 {

@@ -1,3 +1,6 @@
+using Kafka.Consumer.Attributes;
+using Kafka.Consumer.Repositories;
+
 namespace Kafka.Consumer.Consumers;
 
 public class KafkaConsumer : KafkaConsumerBase
@@ -11,7 +14,7 @@ public class KafkaConsumer : KafkaConsumerBase
         _elasticRepository = elasticRepository;
     }
 
-    [Consume(Type = typeof(KafkaExtra), Property = nameof(KafkaExtra.KafkaTopic2))]
+    [Consume(Type = typeof(KafkaExtraConfig), Property = nameof(KafkaExtraConfig.KafkaTopic2))]
     private async Task HandleKafkaMessages(List<KafkaMessage> messages)
     {
         _logger.LogInformation("Kafka messages received...");
