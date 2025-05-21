@@ -1,3 +1,4 @@
+using Kafka.Consumer.Consumers;
 using Kafka.Consumer.Services.Provider;
 using Kafka.Consumer.Workers;
 
@@ -8,14 +9,20 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddKafkaConsumer(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            .AddOptions<KafkaConfig>()
-            .Bind(configuration.GetSection(nameof(KafkaConfig)))
+            .AddOptions<KafkaConsumerConfig>()
+            .Bind(configuration.GetSection(nameof(KafkaConsumerConfig)))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        services
+            .AddOptions<KafkaExtra>()
+            .Bind(configuration.GetSection(nameof(KafkaExtra)))
             .ValidateDataAnnotations()
             .ValidateOnStart();
         services
             .AddHostedService<BackgroundRunner>()
-            .AddSingleton<KafkaConsumer>()
-            .AddSingleton<IKafkaConsumerService, KafkaConsumerService<KafkaMessage>>();
+            // register consumer and consumer message
+            .AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<KafkaMessage, KafkaConsumer>>()
+            .AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<KafkaMessage, KafkaConsumer2>>();
         return services;
     }
     

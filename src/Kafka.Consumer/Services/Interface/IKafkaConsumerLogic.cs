@@ -1,6 +1,6 @@
 namespace Kafka.Consumer.Services.Interface;
 
-public interface IKafkaConsumerService
+public interface IKafkaConsumerLogic
 {
     Task StartConsumingAsync(CancellationToken ctx);
     void Dispose();

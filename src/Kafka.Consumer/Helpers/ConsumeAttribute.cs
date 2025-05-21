@@ -4,5 +4,6 @@ namespace Kafka.Consumer.Helpers;
 public class ConsumeAttribute : Attribute
 {
     public Type Type { get; set; } = null!;
-    public string Topics { get; set; } = null!;
+    public string Property { get; set; } = null!;
+    public string Topic { get; set; } = null!;
 }
