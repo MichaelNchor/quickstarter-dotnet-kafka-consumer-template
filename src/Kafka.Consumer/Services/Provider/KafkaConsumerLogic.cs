@@ -7,7 +7,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
     private readonly ILogger<KafkaConsumerLogic<TMessage, TConsumer>> _logger;
     private readonly IConsumer<Null, string> _consumer;
     private readonly KafkaConsumerConfig _kafkaConsumerConfig;
-    private readonly List<ConsumeResult<Null, string>> _messageBuffer = [];
+    private readonly List<ConsumeResult<Null, string>> _messageBuffer = new();
     private DateTime _lastFlushTime = DateTime.UtcNow;
     private readonly IServiceProvider _serviceProvider;
     private readonly List<Func<TConsumer, List<TMessage>, Task>> _cacheConsumeHandlers;
