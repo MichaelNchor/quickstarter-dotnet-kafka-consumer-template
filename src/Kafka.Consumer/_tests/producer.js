@@ -10,7 +10,7 @@ const kafka = new Kafka({
 const admin = kafka.admin();
 const producer = kafka.producer({createPartitioner: Partitioners.LegacyPartitioner});
 
-const topic = 'topic-2';
+const topic = 'test-topic';
 
 (async () => {
     await admin.connect();

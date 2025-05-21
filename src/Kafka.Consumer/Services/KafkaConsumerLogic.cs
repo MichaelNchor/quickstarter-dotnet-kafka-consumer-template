@@ -51,7 +51,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
 
                 // Flush the buffer if it reaches a certain size or after a certain time
                 TimeSpan timeSinceLastFlush = DateTime.UtcNow - _lastFlushTime;
-                if (_messageBuffer.Count >= _kafkaConsumerConfig.BatchSize ||
+                if (_messageBuffer.Any() && _messageBuffer.Count >= _kafkaConsumerConfig.BatchSize ||
                     timeSinceLastFlush > TimeSpan.FromSeconds(_kafkaConsumerConfig.BatchIntervalInSeconds))
                 {
                     // Process the batch
@@ -63,6 +63,11 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
                 _logger.LogError("Error consuming message: {Error} @ {timestamp}",
                     e.Error.Reason, DateTime.UtcNow);
                 // break;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error in Kafka consumer loop. error message: {error} @ {timestamp}",
+                    ex.Message, DateTime.UtcNow);
             }
             await Task.Yield();
         }
