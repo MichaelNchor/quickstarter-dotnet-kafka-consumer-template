@@ -1,21 +1,22 @@
 using Kafka.Consumer.Attributes;
 using Kafka.Consumer.Repositories;
+using Kafka.Consumer.Services;
 
 namespace Kafka.Consumer.Consumers;
 
-public class KafkaConsumer2 : KafkaConsumerBase
+public class AccountingConsumer : KafkaConsumerBase
 {
-    private readonly ILogger<KafkaConsumer2> _logger;
-    private readonly IElasticRepository<KafkaMessage> _elasticRepository;
+    private readonly ILogger<AccountingConsumer> _logger;
+    private readonly IElasticRepository<AccountMessage> _elasticRepository;
 
-    public KafkaConsumer2(ILogger<KafkaConsumer2> logger, IElasticRepository<KafkaMessage> elasticRepository)
+    public AccountingConsumer(ILogger<AccountingConsumer> logger, IElasticRepository<AccountMessage> elasticRepository)
     {
         _logger = logger;
         _elasticRepository = elasticRepository;
     }
 
-    [Consume(Type = typeof(KafkaConsumerConfig), Property = nameof(KafkaConsumerConfig.TopicsAsSingleString))]
-    private async Task HandleKafkaMessages(List<KafkaMessage> messages)
+    [Consume(Type = typeof(KafkaExtraConfig), Property = nameof(KafkaExtraConfig.KafkaTopic2))]
+    private async Task HandleKafkaMessages(List<AccountMessage> messages)
     {
         _logger.LogInformation("Kafka messages received...");
         foreach (var message in messages)

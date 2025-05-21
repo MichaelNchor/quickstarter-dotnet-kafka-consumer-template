@@ -32,10 +32,15 @@ public class BackgroundRunner : BackgroundService
         }
     }
 
-    public override Task StopAsync(CancellationToken ctx)
+    public override async Task StopAsync(CancellationToken ctx)
     {
-        base.StopAsync(ctx);
+        using IServiceScope scope = _serviceProvider.CreateScope();
+        IEnumerable<IKafkaConsumerLogic> consumerLogics = scope.ServiceProvider.GetServices<IKafkaConsumerLogic>();
+        Parallel.ForEach(consumerLogics, consumer =>
+        {
+            consumer.Dispose();
+        });
+        await base.StopAsync(ctx);
         _logger.LogInformation("BackgroundRunner stopping at {Timestamp}", DateTime.UtcNow);
-        return Task.CompletedTask;
     }
 }

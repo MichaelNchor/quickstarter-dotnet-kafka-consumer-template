@@ -62,7 +62,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
             {
                 _logger.LogError("Error consuming message: {Error} @ {timestamp}",
                     e.Error.Reason, DateTime.UtcNow);
-                break;
+                // break;
             }
             await Task.Yield();
         }

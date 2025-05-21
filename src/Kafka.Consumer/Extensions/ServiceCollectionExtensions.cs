@@ -22,8 +22,8 @@ public static class ServiceCollectionExtensions
         services
             .AddHostedService<BackgroundRunner>()
             // register consumer and consumer message
-            .AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<KafkaMessage, KafkaConsumer>>()
-            .AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<KafkaMessage, KafkaConsumer2>>();
+            .AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<AccountMessage, AccountingConsumer>>()
+            .AddSingleton<IKafkaConsumerLogic, KafkaConsumerLogic<PaymentMessage, PaymentConsumer>>();
         return services;
     }
     
@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
         var section = configuration.GetSection(nameof(OpenSearchConfig));
         var openSearchConfig = section.Get<OpenSearchConfig>();
         if (openSearchConfig is null)
-            throw new InvalidOperationException("Failed to bind OpenSearch configuration. Check 'OpenSearchConfig' section in appsettings.");
+            ArgumentNullException.ThrowIfNull(openSearchConfig, nameof(openSearchConfig));
         var settings = new ConnectionSettings(new Uri(openSearchConfig.Uri))
             .DefaultIndex(openSearchConfig.IndexName);
         return services
