@@ -8,7 +8,9 @@
   "author": "michaelnchor",
   "license": "ISC",
   "description": "",
+  "type": "module",
   "dependencies": {
-    "kafkajs": "^2.2.4"
+    "kafkajs": "^2.2.4",
+    "main.js": "^0.0.1"
   }
 }
