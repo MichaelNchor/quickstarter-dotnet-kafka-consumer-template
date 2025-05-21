@@ -1,0 +1,14 @@
+{
+  "name": "producer",
+  "version": "1.0.0",
+  "main": "producer.js",
+  "scripts": {
+    "test": "node producer.js"
+  },
+  "author": "michaelnchor",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  }
+}
