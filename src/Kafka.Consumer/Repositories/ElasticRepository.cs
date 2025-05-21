@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Services.Provider;
+namespace Kafka.Consumer.Repositories;
 
 public class ElasticRepository<T> : IElasticRepository<T> where T : class
 {

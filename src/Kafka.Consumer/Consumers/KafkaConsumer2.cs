@@ -1,3 +1,6 @@
+using Kafka.Consumer.Attributes;
+using Kafka.Consumer.Repositories;
+
 namespace Kafka.Consumer.Consumers;
 
 public class KafkaConsumer2 : KafkaConsumerBase

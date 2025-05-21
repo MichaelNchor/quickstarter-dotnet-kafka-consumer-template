@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
+using Kafka.Consumer.Attributes;
+using Kafka.Consumer.Extensions;
 
-namespace Kafka.Consumer.Services.Provider;
+namespace Kafka.Consumer.Services;
 
 public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDisposable where TMessage : class where TConsumer : KafkaConsumerBase
 {
@@ -133,7 +135,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
         {
             using IServiceScope scope = _serviceProvider.CreateScope();
 
-            // Construct IOptions<KafkaExtra> or similar
+            // Construct IOptions<Type> or similar
             Type optionsType = typeof(IOptions<>).MakeGenericType(attr?.Type!);
             var optionsObj = scope.ServiceProvider.GetRequiredService(optionsType);
 
@@ -149,7 +151,6 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
             
             topicList.Add(topic!);
         }
-        
         
         var topicByTopic = typeof(TConsumer)
             .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)

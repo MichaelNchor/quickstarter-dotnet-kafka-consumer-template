@@ -1,8 +1,9 @@
 using Kafka.Consumer.Consumers;
-using Kafka.Consumer.Services.Provider;
+using Kafka.Consumer.Repositories;
+using Kafka.Consumer.Services;
 using Kafka.Consumer.Workers;
 
-namespace Kafka.Consumer.Helpers;
+namespace Kafka.Consumer.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -14,8 +15,8 @@ public static class ServiceCollectionExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
         services
-            .AddOptions<KafkaExtra>()
-            .Bind(configuration.GetSection(nameof(KafkaExtra)))
+            .AddOptions<KafkaExtraConfig>()
+            .Bind(configuration.GetSection(nameof(KafkaExtraConfig)))
             .ValidateDataAnnotations()
             .ValidateOnStart();
         services

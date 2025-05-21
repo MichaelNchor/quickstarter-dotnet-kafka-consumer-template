@@ -1,6 +1,6 @@
 namespace Kafka.Consumer.Options;
 
-public class KafkaExtra
+public class KafkaExtraConfig
 {
     public string KafkaTopic2 { get; set; } = null!;
 }
