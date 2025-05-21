@@ -1,11 +1,5 @@
 namespace Kafka.Consumer.Options;
 
-public class KafkaConfig
-{
-    [Required] 
-    public KafkaConsumerConfig Consumer { get; init; } = null!;
-}
-
 public class KafkaConsumerConfig
 {
     [Required] 

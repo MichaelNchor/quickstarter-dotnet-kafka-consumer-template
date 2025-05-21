@@ -3,12 +3,12 @@ namespace Kafka.Consumer.Workers;
 public class BackgroundRunner : BackgroundService
 {
     private readonly ILogger<BackgroundRunner> _logger;
-    private readonly IKafkaConsumerService _kafkaConsumerService;
+    private readonly IServiceProvider _serviceProvider;
 
-    public BackgroundRunner(ILogger<BackgroundRunner> logger, IKafkaConsumerService kafkaConsumerService)
+    public BackgroundRunner(ILogger<BackgroundRunner> logger, IServiceProvider serviceProvider)
     {
         _logger = logger;
-        _kafkaConsumerService = kafkaConsumerService;
+        _serviceProvider = serviceProvider;
     }
 
     protected override async Task ExecuteAsync(CancellationToken ctx)
@@ -17,7 +17,12 @@ public class BackgroundRunner : BackgroundService
 
         try
         {
-            await _kafkaConsumerService.StartConsumingAsync(ctx);
+            using IServiceScope scope = _serviceProvider.CreateScope();
+            IEnumerable<IKafkaConsumerLogic> consumerLogics = scope.ServiceProvider.GetServices<IKafkaConsumerLogic>();
+            await Parallel.ForEachAsync(consumerLogics, ctx, async (consumer, token) =>
+            {
+                await consumer.StartConsumingAsync(token);
+            });
         }
         catch (OperationCanceledException) when (ctx.IsCancellationRequested)
         {
@@ -27,7 +32,6 @@ public class BackgroundRunner : BackgroundService
 
     public override Task StopAsync(CancellationToken ctx)
     {
-        _kafkaConsumerService.Dispose();
         base.StopAsync(ctx);
         _logger.LogInformation("BackgroundRunner stopping at {Timestamp}", DateTime.UtcNow);
         return Task.CompletedTask;
