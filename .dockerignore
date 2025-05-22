@@ -1,0 +1,35 @@
+# Build artifacts
+bin/
+obj/
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.vs
+.vscode/
+.idea/
+
+# OS files
+*.DS_Store
+Thumbs.db
+
+# Node modules (from Core folder)
+**/node_modules/
+
+# Logs and dumps
+*.log
+*.dmp
+
+# Test results
+TestResults/
+*.coverage
+
+# Docker-related
+Dockerfile
+docker-compose.yml
+docker-compose*.yml
+
+# Git
+.git/
+.gitignore
