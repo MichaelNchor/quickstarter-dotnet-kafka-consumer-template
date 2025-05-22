@@ -100,7 +100,7 @@ docker-compose up -d
 - Docker (optional, for containerization)
 - ElasticSearch (optional, for logging)
 
-### 🪜 How to Use
+### ✅ How to Use
 1. Clone the repository:
    ```bash
    # clone the repository
@@ -119,7 +119,7 @@ docker-compose up -d
 
 ---
 
-### 🔧 Test Producer
+### 🛠️ Test Producer
 - The `producer.js` file in the `_tests` directory contains a simple JavaScript test producer that can be used to send test messages to your Kafka topic.
 - To run the test producer, ensure you have Node.js installed and execute the following command
 1. Install Node.js dependencies:
@@ -145,5 +145,5 @@ docker-compose up -d
 
 ---
 
-## Give a Star⭐️
+## ⭐ Give a Star
 If you found this Implementation helpful or used it in your Projects, do give it a star. Thanks!
