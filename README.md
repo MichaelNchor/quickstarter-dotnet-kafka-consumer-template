@@ -84,10 +84,10 @@ This project includes a lightweight `Dockerfile` to easily build and run the Kaf
 
 ```bash
 # Build the Docker image
-docker build -t kafka-consumer
+docker build -t kafka-consumer .
 
 # Run the container (ensure Kafka broker is accessible)
-docker run --rm kafka-consumer
+docker run -d -p 5000:80 --name kafka-consumer kafka-consumer
 
 # Pull Kafka, Kibana and ElasticSearch images from Docker Hub
 docker-compose up -d
