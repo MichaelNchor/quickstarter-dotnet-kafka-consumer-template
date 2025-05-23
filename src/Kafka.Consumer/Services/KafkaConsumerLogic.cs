@@ -61,17 +61,17 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
             }
             catch (ConsumeException e)
             {
-                _logger.LogError("Error consuming message: {Error} @ {timestamp}",
+                _logger.LogError("Error consuming message: {Error} at {timestamp}",
                     e.Error.Reason, DateTime.UtcNow);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error in Kafka consumer loop. error message: {error} @ {timestamp}",
+                _logger.LogError(ex, "Unexpected error in Kafka consumer loop. error message: {error} at {timestamp}",
                     ex.Message, DateTime.UtcNow);
             }
         }
         _consumer.Close();
-        _logger.LogInformation("Consumers stopped @ {timestamp}", DateTime.UtcNow);
+        _logger.LogInformation("Consumers stopped at {timestamp}", DateTime.UtcNow);
     }
 
     private async Task ProcessBatchAsync(ConsumeResult<Null, string> consumeResult)
@@ -85,7 +85,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
         List<TMessage>? deserializedMessages = _messageBuffer.ConvertBufferListToType<TMessage>();
         if (deserializedMessages == null || deserializedMessages.Count == 0)
         {
-            _logger.LogError("Deserializing messages: {messages} failed @ {timestamp}", 
+            _logger.LogError("Deserializing messages: {messages} failed at {timestamp}", 
                 JsonConvert.SerializeObject(_messageBuffer), DateTime.UtcNow);
             return;
         }
@@ -96,7 +96,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
             // Invoke the method with the deserialized messages
             await method(consumer, deserializedMessages);
             _lastFlushTime = DateTime.UtcNow; 
-            _logger.LogInformation("Consumed Message: {message} to topic: {topic} @ {timestamp}",
+            _logger.LogInformation("Consumed Message: {message} to topic: {topic} at {timestamp}",
                 JsonConvert.SerializeObject(consumeResult.Message), consumeResult.Topic, DateTime.UtcNow);
         }
         _messageBuffer.Clear();
@@ -172,8 +172,9 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
     
     public void Dispose()
     {
-        _logger.LogInformation("Disposing {consumer} synchronously", typeof(TConsumer));
-        _consumer.Dispose();
+        _logger.LogInformation("Disposing {consumer} synchronously at {timestamp}", typeof(TConsumer).Name, DateTime.UtcNow);
+        _messageBuffer.Clear();
+        _cacheConsumeHandlers.Clear();
         GC.SuppressFinalize(this);
     }
 }

@@ -16,12 +16,12 @@ public class ElasticRepository<T> : IElasticRepository<T> where T : class
         var indexResponse = await _elasticClient.IndexDocumentAsync(message, ctx);
         if (indexResponse.IsValid)
         {
-            _logger.LogInformation("Successfully indexed message : {message} @ {timestamp}", 
+            _logger.LogInformation("Successfully indexed message : {message} at {timestamp}", 
                 JsonConvert.SerializeObject(message), DateTime.UtcNow);
         }
         else
         {
-            _logger.LogError("Failed to index message: {message} and exception: {exception} @ {timestamp}", 
+            _logger.LogError("Failed to index message: {message} and exception: {exception} at {timestamp}", 
                 JsonConvert.SerializeObject(message), indexResponse.OriginalException.Message, DateTime.UtcNow);
         }    
     }
