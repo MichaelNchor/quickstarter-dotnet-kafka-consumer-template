@@ -13,7 +13,7 @@ public class BackgroundRunner : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken ctx)
     {
-        _logger.LogInformation("BackgroundRunner starting at {Timestamp}", DateTime.UtcNow);
+        _logger.LogInformation("BackgroundRunner starting at {timestamp}", DateTime.UtcNow);
 
         try
         {
@@ -26,7 +26,7 @@ public class BackgroundRunner : BackgroundService
         }
         catch (OperationCanceledException) when (ctx.IsCancellationRequested)
         {
-            _logger.LogInformation("BackgroundRunner cancelled at {Timestamp}", DateTime.UtcNow);
+            _logger.LogInformation("BackgroundRunner cancelled at {timestamp}", DateTime.UtcNow);
         }
     }
 
@@ -37,6 +37,6 @@ public class BackgroundRunner : BackgroundService
             .ToList()
             .ForEach(consumer => consumer.Dispose());
         await base.StopAsync(ctx);
-        _logger.LogInformation("BackgroundRunner stopping at {Timestamp}", DateTime.UtcNow);
+        _logger.LogInformation("BackgroundRunner stopping at {timestamp}", DateTime.UtcNow);
     }
 }
