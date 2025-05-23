@@ -1,6 +1,4 @@
-﻿using Kafka.Consumer.Extensions;
-
-namespace Kafka.Consumer;
+﻿namespace Kafka.Consumer;
 
 class Program
 {
@@ -9,9 +7,9 @@ class Program
         using var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                services
-                    .AddKafkaConsumer(context.Configuration)
-                    .AddOpenSearch(context.Configuration);
+                services.AddLogging();
+                services.AddKafkaConsumer(context.Configuration);
+                services.AddOpenSearch(context.Configuration);
             })
             .Build();
         

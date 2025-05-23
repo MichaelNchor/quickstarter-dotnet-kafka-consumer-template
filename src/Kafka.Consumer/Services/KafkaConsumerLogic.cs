@@ -1,7 +1,3 @@
-using System.Linq.Expressions;
-using Kafka.Consumer.Attributes;
-using Kafka.Consumer.Extensions;
-
 namespace Kafka.Consumer.Services;
 
 public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDisposable where TMessage : class where TConsumer : KafkaConsumerBase
@@ -10,9 +6,10 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
     private readonly IConsumer<Null, string> _consumer;
     private readonly KafkaConsumerConfig _kafkaConsumerConfig;
     private readonly List<ConsumeResult<Null, string>> _messageBuffer = new();
-    private DateTime _lastFlushTime = DateTime.UtcNow;
     private readonly IServiceProvider _serviceProvider;
     private readonly List<Func<TConsumer, List<TMessage>, Task>> _cacheConsumeHandlers;
+    private DateTime _lastFlushTime = DateTime.UtcNow;
+
     public KafkaConsumerLogic(
         ILogger<KafkaConsumerLogic<TMessage,TConsumer>> logger,
         IOptions<KafkaConsumerConfig> kafkaConsumerConfig,
@@ -31,8 +28,12 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
         _consumer = new ConsumerBuilder<Null, string>(config).Build();
         _kafkaConsumerConfig = kafkaConsumerConfig.Value;
         _serviceProvider = serviceProvider;
-        _cacheConsumeHandlers = CacheConsumeHandlers();
-        _consumer.Subscribe(GetAttributeTopics());
+        
+        // Initialize the consumer with the provided configuration
+        var topics = GetAttributeTopics();
+        var consumers = CacheConsumeHandlers();
+        _cacheConsumeHandlers = consumers;
+        _consumer.Subscribe(topics);
     }
     
     public async Task StartConsumingAsync(CancellationToken ctx)
@@ -51,7 +52,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
 
                 // Flush the buffer if it reaches a certain size or after a certain time
                 TimeSpan timeSinceLastFlush = DateTime.UtcNow - _lastFlushTime;
-                if (_messageBuffer.Any() && _messageBuffer.Count >= _kafkaConsumerConfig.BatchSize ||
+                if (_messageBuffer.Count >= _kafkaConsumerConfig.BatchSize ||
                     timeSinceLastFlush > TimeSpan.FromSeconds(_kafkaConsumerConfig.BatchIntervalInSeconds))
                 {
                     // Process the batch
@@ -62,14 +63,12 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
             {
                 _logger.LogError("Error consuming message: {Error} @ {timestamp}",
                     e.Error.Reason, DateTime.UtcNow);
-                // break;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected error in Kafka consumer loop. error message: {error} @ {timestamp}",
                     ex.Message, DateTime.UtcNow);
             }
-            await Task.Yield();
         }
         _consumer.Close();
         _logger.LogInformation("Consumers stopped @ {timestamp}", DateTime.UtcNow);
@@ -113,6 +112,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
                         && m.GetParameters()[0].ParameterType == typeof(List<TMessage>))
             .ToList();
         
+        // Iterate through each method and create a lambda expression
         foreach (var methodInfo in consumeMethodInfos)
         {
             ParameterExpression consumerParameter = Expression.Parameter(typeof(TConsumer), "consumer");
@@ -172,7 +172,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
     
     public void Dispose()
     {
-        _logger.LogInformation("Disposing KafkaConsumerLogic<{type}> synchronously", typeof(TMessage).Name);
+        _logger.LogInformation("Disposing {consumer} synchronously", typeof(TConsumer));
         _consumer.Dispose();
         GC.SuppressFinalize(this);
     }

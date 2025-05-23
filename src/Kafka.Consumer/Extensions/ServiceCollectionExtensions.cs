@@ -1,8 +1,3 @@
-using Kafka.Consumer.Consumers;
-using Kafka.Consumer.Repositories;
-using Kafka.Consumer.Services;
-using Kafka.Consumer.Workers;
-
 namespace Kafka.Consumer.Extensions;
 
 public static class ServiceCollectionExtensions
