@@ -23,7 +23,7 @@ public class PaymentConsumer : KafkaConsumerBase
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to index message: {message} and exception: {exception} @ {timestamp}",
+                _logger.LogError("Failed to index message: {message} and exception: {exception} at {timestamp}",
                     JsonConvert.SerializeObject(message), ex.Message, DateTime.UtcNow);
             }
         }
