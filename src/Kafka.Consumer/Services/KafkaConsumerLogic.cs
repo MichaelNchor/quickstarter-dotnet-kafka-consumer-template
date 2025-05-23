@@ -59,10 +59,10 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
                     await ProcessBatchAsync(consumeResult);
                 }
             }
-            catch (ConsumeException e)
+            catch (ConsumeException ex)
             {
                 _logger.LogError("Error consuming message: {Error} at {timestamp}",
-                    e.Error.Reason, DateTime.UtcNow);
+                    ex.Error.Reason, DateTime.UtcNow);
             }
             catch (Exception ex)
             {
@@ -126,7 +126,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
         return handlers;
     }
     
-    private List<string> GetAttributeTopics()
+    private IEnumerable<string> GetAttributeTopics()
     {
         var topicList = new List<string>();
         
