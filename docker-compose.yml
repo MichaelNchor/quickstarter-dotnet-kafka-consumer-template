@@ -1,4 +1,5 @@
-version: "2"
+version: "3.9"
+
 services:
   kafka-ui:
     image: provectuslabs/kafka-ui
@@ -9,7 +10,7 @@ services:
       KAFKA_CLUSTERS_0_NAME: "local"
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:29092"
     depends_on:
-      - "kafka"
+      - kafka
 
   kafka:
     image: obsidiandynamics/kafka
@@ -29,13 +30,27 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.1.0
-    environment: 
-      - discovery.type=single-node
     container_name: elasticsearch
-    ports: ['9200:9200']
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.1.0
     container_name: kibana
-    ports: ['5601:5601']
-    depends_on: ['elasticsearch']
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  kafka-consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+      - elasticsearch
+    environment:
+      Kafka__BootstrapServers: kafka:29092
+    restart: always
