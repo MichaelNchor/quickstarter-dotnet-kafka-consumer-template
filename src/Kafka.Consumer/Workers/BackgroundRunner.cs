@@ -1,5 +1,3 @@
-using Kafka.Consumer.Services;
-
 namespace Kafka.Consumer.Workers;
 
 public class BackgroundRunner : BackgroundService

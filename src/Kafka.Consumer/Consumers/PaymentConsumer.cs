@@ -1,7 +1,3 @@
-using Kafka.Consumer.Attributes;
-using Kafka.Consumer.Repositories;
-using Kafka.Consumer.Services;
-
 namespace Kafka.Consumer.Consumers;
 
 public class PaymentConsumer : KafkaConsumerBase
