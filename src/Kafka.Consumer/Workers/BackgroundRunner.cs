@@ -14,29 +14,50 @@ public class BackgroundRunner : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken ctx)
     {
         _logger.LogInformation("BackgroundRunner starting at {timestamp}", DateTime.UtcNow);
-
         try
         {
             using IServiceScope scope = _serviceProvider.CreateScope();
             IEnumerable<IKafkaConsumerLogic> consumerLogics = scope.ServiceProvider.GetServices<IKafkaConsumerLogic>();
             await Parallel.ForEachAsync(consumerLogics, ctx, async (consumer, token) =>
             {
-                await consumer.StartConsumingAsync(token);
+                try
+                {
+                    _logger.LogInformation("Starting Kafka consumer: {consumer} at {timestamp}", consumer.GetType().Name, DateTime.UtcNow);
+                    await consumer.StartConsumingAsync(token);
+                }
+                catch (OperationCanceledException) when (token.IsCancellationRequested)
+                {
+                    _logger.LogInformation("Kafka consumer {consumer} canceled at {timestamp}.", consumer.GetType().Name, DateTime.UtcNow);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error: {error} in Kafka consumer {consumer} at {timestamp}", ex.Message, consumer.GetType().Name, DateTime.UtcNow);
+                }
             });
         }
         catch (OperationCanceledException) when (ctx.IsCancellationRequested)
         {
             _logger.LogInformation("BackgroundRunner cancelled at {timestamp}", DateTime.UtcNow);
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error: {error} in BackgroundRunner at {timestamp}", ex.Message, DateTime.UtcNow);
+        }
     }
 
     public override async Task StopAsync(CancellationToken ctx)
     {
-        _serviceProvider
-            .GetServices<IKafkaConsumerLogic>()
-            .ToList()
-            .ForEach(consumer => consumer.Dispose());
-        await base.StopAsync(ctx);
         _logger.LogInformation("BackgroundRunner stopping at {timestamp}", DateTime.UtcNow);
+        try
+        {
+            using IServiceScope scope = _serviceProvider.CreateScope();
+            scope.ServiceProvider.GetServices<IKafkaConsumerLogic>().ToList()
+                .ForEach(consumer => consumer.Dispose());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error: {error} in BackgroundRunner at {timestamp}", ex.Message, DateTime.UtcNow);
+        }
+        await base.StopAsync(ctx);
     }
 }
