@@ -66,7 +66,7 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{consumer}: Unexpected error in loop. error message: {error} at {timestamp}", typeof(TConsumer).Name,
+                _logger.LogError("{consumer}: Unexpected error in loop. error message: {error} at {timestamp}", typeof(TConsumer).Name,
                     ex.Message, DateTime.UtcNow);
             }
         }
