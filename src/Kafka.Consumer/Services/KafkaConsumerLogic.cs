@@ -70,8 +70,8 @@ public class KafkaConsumerLogic<TMessage, TConsumer> : IKafkaConsumerLogic, IDis
                     ex.Message, DateTime.UtcNow);
             }
         }
-        _consumer.Close();
         _logger.LogInformation("{consumer} stopped at {timestamp}",typeof(TConsumer).Name, DateTime.UtcNow);
+        _consumer.Close();
     }
 
     private async Task ProcessBatchAsync(ConsumeResult<Null, string> consumeResult)
