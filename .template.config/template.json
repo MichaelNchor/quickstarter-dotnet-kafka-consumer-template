@@ -5,7 +5,7 @@
     "classifications": [ "Kafka", "Consumer" ],
     "identity": "Quickstarter.Kafka.Consumer",
     "name": "Quickstarter Kafka Consumer",
-    "shortName": "kafka-consumer",
+    "shortName": "quickstarter-kafka-consumer",
     "sourceName": "Kafka.Consumer",
     "description": "A template for creating Kafka consumer project in C#.",
     "tags": {
