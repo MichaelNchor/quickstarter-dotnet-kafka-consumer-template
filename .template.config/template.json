@@ -1,13 +1,13 @@
 {
     "$scchema": "http://json.schemastore.org/template",
-    "author": "Nchor Michael",
-    "classifications": [ "KafkaConsumerTemplate" ],
-    "identity": "Hubtel.Kafka.Consumer",
+    "defaultName": "Kafka.Consumer",
+    "author": "Michael Nchor",
+    "classifications": [ "Kafka", "Consumer" ],
+    "identity": "Quickstarter.Kafka.Consumer",
     "name": "Quickstarter Kafka Consumer",
     "shortName": "kafka-consumer",
     "sourceName": "Kafka.Consumer",
-    "description": "A template for creating a Kafka consumer project in C#.",
-    "preferNameDirectory": true,
+    "description": "A template for creating Kafka consumer project in C#.",
     "tags": {
       "language": "C#",
       "type": "project"
