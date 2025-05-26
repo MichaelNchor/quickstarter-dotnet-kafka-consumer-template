@@ -5,6 +5,14 @@
         <LangVersion>latestmajor</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>Quickstarter.Kafka.Consumer.Tests</PackageId>
+        <Version>1.0.0-alpha.1</Version>
+        <Authors>Michael Nchor</Authors>
+        <Description>A unit test project in C#.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</PackageProjectUrl>
+        <PackageReleaseNotes>Unit test starter.</PackageReleaseNotes>
+        <PackageTags>unit test, xunit, dotnet, csharp</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>

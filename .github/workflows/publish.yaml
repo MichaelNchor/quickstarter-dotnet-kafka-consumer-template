@@ -1,0 +1,21 @@
+name: Publish Nuget Package
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    
+jobs: 
+  publish_nuget_package:
+    name: Publish Nuget Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pack
+        run: |
+          dotnet pack src/Kafka.Consumer/ -c Release -o .output
+      - name: Publish
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push .output/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY

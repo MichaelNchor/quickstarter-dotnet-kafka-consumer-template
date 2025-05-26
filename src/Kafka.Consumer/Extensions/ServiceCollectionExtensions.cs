@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
     
+    #if UseOpenSearch
     public static IServiceCollection AddOpenSearch(this IServiceCollection services, IConfiguration configuration)
     {
         var section = configuration.GetSection(nameof(OpenSearchConfig));
@@ -35,4 +36,5 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IElasticClient>(new ElasticClient(settings))
             .AddTransient(typeof(IElasticRepository<>), typeof(ElasticRepository<>));
     }
+    #endif
 }
