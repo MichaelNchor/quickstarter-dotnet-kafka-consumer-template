@@ -18,6 +18,7 @@
         <PackageTags>kafka, consumer, template, dotnet, csharp</PackageTags>
         <RepositoryUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</RepositoryUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageType>Template</PackageType>
     </PropertyGroup>
     
     <ItemGroup>
