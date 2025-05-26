@@ -7,7 +7,25 @@
         <LangVersion>latestmajor</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>Quickstarter.Kafka.Consumer</PackageId>
+        <Version>1.0.0-alpha.2</Version>
+        <Authors>Michael Nchor</Authors>
+        <Description>A template for creating Kafka consumer project in C#.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</PackageProjectUrl>
+        <PackageIcon>quickstarter-icon.jpg</PackageIcon>
+        <PackageReleaseNotes>Initial release of the Kafka consumer template.</PackageReleaseNotes>
+        <PackageTags>kafka, consumer, template, dotnet, csharp</PackageTags>
+        <RepositoryUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="..\..\quickstarter-icon.jpg" Pack="true" PackagePath="/" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="/" />
+        <None Include="..\..\docker-compose.yml" Pack="true" PackagePath="/" />
+        <None Include="..\..\Dockerfile" Pack="true" PackagePath="/" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Confluent.Kafka" Version="2.10.0" />
@@ -16,9 +34,14 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
-        <PackageReference Include="NEST" Version="7.17.5" />    
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />    
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
+    
+    <!--#if (UseOpenSearch) -->
+    <ItemGroup>
+        <PackageReference Include="NEST" Version="7.17.5" />
+    </ItemGroup>
+    <!--#endif -->
 
     <ItemGroup>
         <None Update="appsettings.json">

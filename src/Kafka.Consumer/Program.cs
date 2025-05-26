@@ -15,9 +15,12 @@ class Program
             })
             .ConfigureServices((context, services) =>
             {
-                services
-                    .AddKafkaConsumer(context.Configuration)
-                    .AddOpenSearch(context.Configuration);
+                services.AddKafkaConsumer(context.Configuration);
+                
+                #if UseOpenSearch
+                services.AddOpenSearch(context.Configuration);
+                #endif
+                
             })
             .Build();
         

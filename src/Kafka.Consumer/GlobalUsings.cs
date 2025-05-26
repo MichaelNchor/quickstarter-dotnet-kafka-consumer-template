@@ -10,10 +10,12 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Kafka.Consumer.Models;
+#if UseOpenSearch
 global using Kafka.Consumer.Repositories;
+global using Nest;
+#endif
 global using Kafka.Consumer.Services;
 global using Kafka.Consumer.Workers;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
-global using Nest;
 global using Newtonsoft.Json;

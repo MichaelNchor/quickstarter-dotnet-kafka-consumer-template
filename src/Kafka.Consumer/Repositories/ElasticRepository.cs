@@ -1,3 +1,5 @@
+#if UseOpenSearch
+
 namespace Kafka.Consumer.Repositories;
 
 public class ElasticRepository<T> : IElasticRepository<T> where T : class
@@ -26,3 +28,5 @@ public class ElasticRepository<T> : IElasticRepository<T> where T : class
         }    
     }
 }
+
+#endif

@@ -2,7 +2,7 @@ namespace Kafka.Consumer.Options;
 
 public class KafkaConsumerConfig
 {
-    public required IEnumerable<string> Topics { get; init; }
+    public IEnumerable<string> Topics { get; init; } = null!;
     public string TopicsAsSingleString => string.Join(",", Topics);
     [Required]
     public string BootstrapServers { get; init; } = null!;
