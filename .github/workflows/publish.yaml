@@ -11,6 +11,7 @@ jobs:
     name: Publish Nuget Package
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Pack
         run: |
           dotnet pack src/Kafka.Consumer/ -c Release -o .output
