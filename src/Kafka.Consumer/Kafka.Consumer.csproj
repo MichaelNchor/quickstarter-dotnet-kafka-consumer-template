@@ -26,6 +26,7 @@
         <None Include="..\..\README.md" Pack="true" PackagePath="/" />
         <None Include="..\..\docker-compose.yml" Pack="true" PackagePath="/" />
         <None Include="..\..\Dockerfile" Pack="true" PackagePath="/" />
+        <None Include="..\..\.template.config\template.json" Pack="true" PackagePath="/.template.config/" />
     </ItemGroup>
 
     <ItemGroup>
