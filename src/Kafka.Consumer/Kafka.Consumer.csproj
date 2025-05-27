@@ -24,9 +24,6 @@
     <ItemGroup>
         <None Include="..\..\quickstarter-icon.jpg" Pack="true" PackagePath="/" />
         <None Include="..\..\README.md" Pack="true" PackagePath="/" />
-        <None Include="..\..\docker-compose.yml" Pack="true" PackagePath="/" />
-        <None Include="..\..\Dockerfile" Pack="true" PackagePath="/" />
-        <None Include="..\..\.template.config\template.json" Pack="true" PackagePath="/.template.config/" />
     </ItemGroup>
 
     <ItemGroup>
@@ -51,6 +48,15 @@
         </None>
         <None Update="appsettings.Development.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="docker-compose.yml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="Dockerfile">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
