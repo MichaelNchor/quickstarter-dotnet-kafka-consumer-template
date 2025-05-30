@@ -31,7 +31,7 @@
                     ]
                 }
             ],
-            "source": "../Kafka.Consumer/",
+            "source": "./",
             "target": "./",
             "include": [ "**/*" ],
             "exclude": [
