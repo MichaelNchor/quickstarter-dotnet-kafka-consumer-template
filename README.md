@@ -8,8 +8,8 @@ A clean, minimal, Kafka consumer template built with C# and .NET. This project p
 
 ```plaintext
 quickstarter-dotnet-kafka-consumer-template/
-├── src/
-│   └── Kafka.Consumer/
+
+│── Kafka.Consumer/
 │       ├── Attributes/                  
 │       │   └── ConsumeAttribute.cs
 │       ├── Consumers/                   
@@ -40,14 +40,6 @@ quickstarter-dotnet-kafka-consumer-template/
 │       ├── appsettings*.json           
 │       ├── Kafka.Consumer.csproj     
 │       └── Program.cs                 
-│
-├── tests/
-│   └── Kafka.Consumer.Tests/ 
-│       ├── Components/
-│       │   ├── ConfigurationManager.cs
-│       │   └── DiFixture.cs
-│       ├── appsettings.json   
-│       └── Kafka.Consumer.Tests.csproj 
 │
 └── .idea/, .git/, README.md, etc.
 ```
@@ -130,7 +122,7 @@ docker-compose up -d
 2. Run the test producer:
    ```bash
    # Navigate to the test producer directory
-   cd src/Kafka.Consumer/_tests
+   cd Kafka.Consumer/_tests
    
    # Install dependencies
    npm install
@@ -138,11 +130,7 @@ docker-compose up -d
    # Run the test producer
    node producer.js
    ```
----
-
-### 🧪 Testing
-- Unit tests are included in the `tests` directory.
-
+   
 ---
 
 ## ⭐ Give a Star

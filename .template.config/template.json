@@ -31,11 +31,9 @@
                     ]
                 }
             ],
-            "source": "./",
-            "target": ".",
-            "include": [
-                "*"
-            ],
+            "source": "../Kafka.Consumer/",
+            "target": "./",
+            "include": [ "**/*" ],
             "exclude": [
                 "**/.idea/**",
                 ".vs/**",
@@ -44,7 +42,6 @@
                 ".github/**",
                 "**/[Bb]in/**",
                 "**/[Oo]bj/**",
-                "**/.template.config/**",
                 "**/*.filelist",
                 "**/*.user",
                 "**/*.lock.json",

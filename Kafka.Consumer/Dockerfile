@@ -3,11 +3,10 @@
 # -------------------
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+WORKDIR /
 
 # Copy the solution and project files
-COPY src/Kafka.Consumer/Kafka.Consumer.csproj src/Kafka.Consumer/
-COPY tests/Kafka.Consumer.Tests/Kafka.Consumer.Tests.csproj tests/Kafka.Consumer.Tests/
+COPY Kafka.Consumer/Kafka.Consumer.csproj /Kafka.Consumer/
 COPY *.sln .
 
 # Restore the dependencies
@@ -17,7 +16,7 @@ RUN dotnet restore
 COPY . .
 
 #Publish the project
-RUN dotnet publish src/Kafka.Consumer/Kafka.Consumer.csproj -c Release -o /app/publish
+RUN dotnet publish Kafka.Consumer/Kafka.Consumer.csproj -c Release -o /app/publish
 
 # -------------------
 # Runtime stage
