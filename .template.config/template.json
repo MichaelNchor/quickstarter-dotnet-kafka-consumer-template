@@ -33,9 +33,7 @@
             ],
             "source": "./",
             "target": "./",
-            "include": [
-                "**/*"
-            ],
+            "include": [ "**/*" ],
             "exclude": [
                 "**/.idea/**",
                 ".vs/**",
@@ -44,7 +42,6 @@
                 ".github/**",
                 "**/[Bb]in/**",
                 "**/[Oo]bj/**",
-                "**/.template.config/**",
                 "**/*.filelist",
                 "**/*.user",
                 "**/*.lock.json",
