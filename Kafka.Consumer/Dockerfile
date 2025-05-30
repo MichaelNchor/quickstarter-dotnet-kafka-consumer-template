@@ -7,7 +7,7 @@ WORKDIR /
 
 # Copy the solution and project files
 COPY Kafka.Consumer/Kafka.Consumer.csproj /Kafka.Consumer/
-COPY *.sln .
+COPY *.scproj .
 
 # Restore the dependencies
 RUN dotnet restore
