@@ -13,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Pack
-        run: |
-          dotnet pack -o .output
+        working-directory: ./TemplatePackaging
+        run: dotnet pack -o ../.output
       - name: Publish
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
-          dotnet nuget push .output/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY
+          dotnet nuget push **/.output/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY
