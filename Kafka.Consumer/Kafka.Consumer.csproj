@@ -7,24 +7,7 @@
         <LangVersion>latestmajor</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageId>Quickstarter.Kafka.Consumer</PackageId>
-        <Version>1.0.0-alpha.5</Version>
-        <Authors>Michael Nchor</Authors>
-        <Description>A template for creating Kafka consumer project in C#.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</PackageProjectUrl>
-        <PackageIcon>quickstarter-icon.jpg</PackageIcon>
-        <PackageReleaseNotes>Initial release of the Kafka consumer template.</PackageReleaseNotes>
-        <PackageTags>kafka, consumer, template, dotnet, csharp</PackageTags>
-        <RepositoryUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</RepositoryUrl>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageType>Template</PackageType>
     </PropertyGroup>
-    
-    <ItemGroup>
-        <None Include="..\quickstarter-icon.jpg" Pack="true" PackagePath="/" />
-        <None Include="..\README.md" Pack="true" PackagePath="/" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Confluent.Kafka" Version="2.10.0" />
@@ -43,21 +26,10 @@
     <!--#endif -->
 
     <ItemGroup>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="appsettings.Development.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="docker-compose.yml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Include="Dockerfile">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+        <None Update="appsettings.json" CopyToOutputDirectory="Always" />
+        <None Update="appsettings.Development.json" CopyToOutputDirectory="Always" />
+        <None Include="docker-compose.yml" CopyToOutputDirectory="Always" />
+        <None Include="Dockerfile" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
 </Project>

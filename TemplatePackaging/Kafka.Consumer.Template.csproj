@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <NoBuild>true</NoBuild>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+
+        <LangVersion>latestmajor</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Quickstarter.Kafka.Consumer</PackageId>
+        <Version>1.0.0-alpha.6</Version>
+        <Authors>Michael Nchor</Authors>
+        <Description>A template for creating Kafka consumer project in C#.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</PackageProjectUrl>
+        <PackageIcon>quickstarter-icon.jpg</PackageIcon>
+        <PackageReleaseNotes>Initial release of the Kafka consumer template.</PackageReleaseNotes>
+        <PackageTags>kafka, consumer, template, dotnet, csharp</PackageTags>
+        <RepositoryUrl>https://github.com/MichaelNchor/quickstarter-dotnet-kafka-consumer-template</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageType>Template</PackageType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\Kafka.Consumer\**\*" Exclude="..\Kafka.Consumer\**\.vs\**;**\bin\**;**\obj\**" Pack="true" PackagePath="content/" />
+        <None Include="..\README.md" Pack="true" PackagePath="/" />
+        <None Include="quickstarter-icon.jpg" Pack="true" PackagePath="/" />
+        <None Include=".template.config\template.json" Pack="true" PackagePath="template.config/" />
+    </ItemGroup>
+
+</Project>
