@@ -19,7 +19,7 @@ dotnet new install Quickstarter.Kafka.Consumer::1.0.0
 
 ```bash
 # Create a new Kafka consumer project
-dotnet new kafka-consumer -n MyKafkaConsumer
+dotnet new  quickstarter-kafka-consumer -n MyKafkaConsumer
 ```
 
 ---
@@ -35,7 +35,7 @@ You can customize your generated project with the following options:
 
 Example with Options:
 ```bash
-dotnet new kafka-consumer -n MyKafkaConsumer --Framework net8.0 --UseOpenSearch true
+dotnet new  quickstarter-kafka-consumer -n MyKafkaConsumer --Framework net8.0 --UseOpenSearch true
 ```
 
 ---
@@ -47,7 +47,8 @@ Kafka.Consumer
 │
 ├── _tests/                  # JavaScript-based test Kafka message producer
 │   └── Core/
-│       └── producer.js
+│   └──── main.js
+│   └── main.js
 │
 ├── Attributes/              # Custom attributes for consumer discovery
 │   └── ConsumeAttribute.cs
