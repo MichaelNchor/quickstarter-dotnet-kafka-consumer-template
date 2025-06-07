@@ -51,14 +51,14 @@
                 "**/*.suo",
                 "**/*.pdb",
                 "**/.gitignore",
-                "quickstarter-icon.jpg",
-                "README.md",
                 "**/*.nuspec",
-                "**/[Content_Types].xml",
+                "**/*.xml",
                 "**/_rels/**",
                 "**/package/**",
-                "**/.signature",
-                "**/.template.config/**"
+                "**/*.p7s",
+                "**/.template.config/**",
+                "quickstarter-icon.jpg",
+                "README.md"
             ]
         }
     ],

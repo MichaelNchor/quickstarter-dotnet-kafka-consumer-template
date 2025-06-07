@@ -24,7 +24,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\Kafka.Consumer\**\*" Exclude="..\Kafka.Consumer\**\.vs\**;**\bin\**;**\obj\**;**\.signature;**\[Content_Types].xml;**\_rels\**" Pack="true" PackagePath="" />
+        <None Include="..\Kafka.Consumer\**\*" Exclude="..\Kafka.Consumer\**\.vs\**;**\bin\**;**\obj\**;**\.signature;**\[Content_Types].xml;**\_rels\**;**\*.p7s;**\*.xml" Pack="true" PackagePath="" />
         <None Include="..\README.md" Pack="true" PackagePath="" />
         <None Include="quickstarter-icon.jpg" Pack="true" PackagePath="" CopyToOutputDirectory="Never" />
         <None Include=".template.config\template.json" Pack="true" PackagePath=".template.config/" CopyToOutputDirectory="Never"/>
