@@ -10,7 +10,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>Quickstarter.Kafka.Consumer</PackageId>
-        <Version>1.0.3-alpha.1</Version>
+        <Version>1.0.3-alpha.2</Version>
         <Authors>Michael Nchor</Authors>
         <Description>A template for creating Kafka consumer project in C#.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -27,7 +27,7 @@
         <None Include="..\Kafka.Consumer\**\*" Exclude="..\Kafka.Consumer\**\.vs\**;**\bin\**;**\obj\**" Pack="true" PackagePath="" />
         <None Include="..\README.md" Pack="true" PackagePath="" />
         <None Include="quickstarter-icon.jpg" Pack="true" PackagePath="" CopyToOutputDirectory="Never" />
-        <None Include=".template.config\template.json" Pack="true" PackagePath="template.config/" CopyToOutputDirectory="Never"/>
+        <None Include=".template.config\template.json" Pack="true" PackagePath="" CopyToOutputDirectory="Never"/>
     </ItemGroup>
 
 </Project>
