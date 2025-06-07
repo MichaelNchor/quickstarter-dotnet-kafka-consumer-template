@@ -4,7 +4,7 @@ public class PaymentConsumer : KafkaConsumerBase
 {
     private readonly ILogger<PaymentConsumer> _logger;
     #if UseOpenSearch 
-    private readonly IElasticRepository<PaymentConsumer> _elasticRepository;
+    private readonly IElasticRepository<PaymentMessage> _elasticRepository;
     #endif
     
     public PaymentConsumer(ILogger<PaymentConsumer> logger
