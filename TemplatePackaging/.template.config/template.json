@@ -50,7 +50,15 @@
                 "**/*.csproj.user",
                 "**/*.suo",
                 "**/*.pdb",
-                "**/.gitignore"
+                "**/.gitignore",
+                "quickstarter-icon.jpg",
+                "README.md",
+                "**/*.nuspec",
+                "**/[Content_Types].xml",
+                "**/_rels/**",
+                "**/package/**",
+                "**/.signature",
+                "**/template.config/**"
             ]
         }
     ],
