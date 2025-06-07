@@ -7,41 +7,47 @@ A clean, minimal, Kafka consumer template built with C# and .NET. This project p
 ## 📁 Project Structure
 
 ```plaintext
-quickstarter-dotnet-kafka-consumer-template/
-
-│── Kafka.Consumer/
-│       ├── Attributes/                  
-│       │   └── ConsumeAttribute.cs
-│       ├── Consumers/                   
-│       │   ├── AccountingConsumer.cs
-│       │   └── PaymentConsumer.cs
-│       ├── Core/                        
-│       │   ├── main.js
-│       │   └── producer.js
-│       ├── Extensions/                  
-│       │   ├── SerializationExtensions.cs
-│       │   └── ServiceCollectionExtensions.cs
-│       ├── Models/                      
-│       │   ├── AccountMessage.cs
-│       │   ├── BaseEntity.cs
-│       │   └── PaymentMessage.cs
-│       ├── Options/                     
-│       │   ├── KafkaConsumerConfig.cs
-│       │   ├── KafkaExtraConfig.cs
-│       │   └── OpenSearchConfig.cs
-│       ├── Repositories/                
-│       │   └── ElasticRepository.cs
-│       ├── Services/                    
-│       │   ├── IKafkaConsumerLogic.cs
-│       │   ├── KafkaConsumerBase.cs
-│       │   └── KafkaConsumerLogic.cs
-│       ├── Workers/                    
-│       │   └── BackgroundRunner.cs
-│       ├── appsettings*.json           
-│       ├── Kafka.Consumer.csproj     
-│       └── Program.cs                 
+Kafka.Consumer
 │
-└── .idea/, .git/, README.md, etc.
+├── _tests/                  # JavaScript-based test Kafka message producer
+│   └── Core/
+│       └── producer.js
+│
+├── Attributes/              # Custom attributes for consumer discovery
+│   └── ConsumeAttribute.cs
+│
+├── Consumers/              # Application-specific Kafka message consumers
+│   ├── AccountingConsumer.cs
+│   └── PaymentConsumer.cs
+│
+├── Extensions/             # Extension methods for DI and serialization
+│   ├── SerializationExtensions.cs
+│   └── ServiceCollectionExtensions.cs
+│
+├── Models/                 # Message and base domain models
+│   ├── AccountMessage.cs
+│   ├── BaseEntity.cs
+│   └── PaymentMessage.cs
+│
+├── Options/                # Strongly typed configuration classes
+│   ├── KafkaConsumerConfig.cs
+│   ├── KafkaExtraConfig.cs
+│   └── OpenSearchConfig.cs
+│
+├── Services/               # Core consumer logic and business handling
+│   ├── KafkaConsumerBase.cs
+│   ├── KafkaConsumerLogic.cs
+│   └── KafkaConsumerLogic.cs
+│
+├── Workers/                # Background service entry point
+│   └── BackgroundRunner.cs
+│
+├── Dockerfile              # Production-ready Dockerfile
+├── docker-compose.yml      # Optional: for local Kafka test setup
+├── appsettings.json        # Application configuration
+├── appsettings.Development.json
+├── GlobalUsings.cs
+└── Program.cs              # Host builder and entry point
 ```
 
 ---
