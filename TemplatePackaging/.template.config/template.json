@@ -58,7 +58,7 @@
                 "**/_rels/**",
                 "**/package/**",
                 "**/.signature",
-                "**/template.config/**"
+                "**/.template.config/**"
             ]
         }
     ],
