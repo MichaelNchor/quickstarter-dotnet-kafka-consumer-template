@@ -4,6 +4,42 @@ A clean, minimal, Kafka consumer template built with C# and .NET. This project p
 
 --- 
 
+## ⬇️ Installation via dotnet new
+
+You can install this template directly from NuGet using the .NET CLI:
+
+```bash
+# Install the template
+dotnet new install Quickstarter.Kafka.Consumer::1.0.0
+````
+
+---
+
+### Create a new Kafka consumer project
+
+```bash
+# Create a new Kafka consumer project
+dotnet new kafka-consumer -n MyKafkaConsumer
+```
+
+---
+
+## ⚙️ Template Options
+
+You can customize your generated project with the following options:
+
+| Option            | Description                   | Values                       | Default  |
+| ----------------- | ----------------------------- | ---------------------------- | -------- |
+| `--Framework`     | Target .NET framework version | `net6.0`, `net7.0`, `net8.0` | `net8.0` |
+| `--UseOpenSearch` | Enable OpenSearch integration | `true`, `false`              | `false`  |
+
+Example with Options:
+```bash
+dotnet new kafka-consumer -n MyKafkaConsumer --Framework net8.0 --UseOpenSearch true
+```
+
+---
+
 ## 📁 Project Structure
 
 ```plaintext
@@ -35,10 +71,14 @@ Kafka.Consumer
 │   └── OpenSearchConfig.cs
 │
 ├── Services/               # Core consumer logic and business handling
-│   ├── KafkaConsumerBase.cs
+│   ├── IKafkaConsumerBase.cs
 │   ├── KafkaConsumerLogic.cs
 │   └── KafkaConsumerLogic.cs
-│
+|
+├── Repositories/           # Core repositories for data access
+│   ├── IElasticRepository.cs
+│   ├── ElasticRepository.cs
+|
 ├── Workers/                # Background service entry point
 │   └── BackgroundRunner.cs
 │
