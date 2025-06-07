@@ -10,7 +10,7 @@ You can install this template directly from NuGet using the .NET CLI:
 
 ```bash
 # Install the template
-dotnet new install Quickstarter.Kafka.Consumer::1.0.2
+dotnet new install Quickstarter.Kafka.Consumer::1.0.4
 ````
 
 ---
