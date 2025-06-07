@@ -23,6 +23,10 @@
         <PackageType>Template</PackageType>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
     <ItemGroup>
         <None Include="..\Kafka.Consumer\**\*" Exclude="..\Kafka.Consumer\**\.vs\**;**\bin\**;**\obj\**" Pack="true" PackagePath="content/" />
         <None Include="..\README.md" Pack="true" PackagePath="/" />
