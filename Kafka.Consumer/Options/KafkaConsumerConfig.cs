@@ -13,5 +13,5 @@ public class KafkaConsumerConfig
     [Required]
     public string SecurityProtocol { get; init; } = null!;
     public int BatchSize { get; init; } = 1;
-    public int BatchIntervalInSeconds { get; init; } = 1;
+    public int BatchIntervalInSeconds { get; init; } = 0;
 }
