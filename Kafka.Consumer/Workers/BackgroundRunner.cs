@@ -4,7 +4,6 @@ public class BackgroundRunner : BackgroundService
 {
     private readonly ILogger<BackgroundRunner> _logger;
     private readonly IServiceProvider _serviceProvider;
-    private List<IKafkaConsumerLogic> _activeConsumers = new();
 
     public BackgroundRunner(ILogger<BackgroundRunner> logger, IServiceProvider serviceProvider)
     {
@@ -18,8 +17,8 @@ public class BackgroundRunner : BackgroundService
         try
         {
             using IServiceScope scope = _serviceProvider.CreateScope();
-            _activeConsumers = scope.ServiceProvider.GetServices<IKafkaConsumerLogic>().ToList();
-            await Parallel.ForEachAsync(_activeConsumers, ctx, async (consumer, token) =>
+            IEnumerable<IKafkaConsumerLogic> consumerLogics = scope.ServiceProvider.GetServices<IKafkaConsumerLogic>();
+            await Parallel.ForEachAsync(consumerLogics, ctx, async (consumer, token) =>
             {
                 try
                 {
@@ -51,7 +50,9 @@ public class BackgroundRunner : BackgroundService
         _logger.LogInformation("BackgroundRunner stopping at {timestamp}", DateTime.UtcNow);
         try
         {
-            _activeConsumers.ForEach(consumer => consumer.Dispose());
+            using IServiceScope scope = _serviceProvider.CreateScope();
+            scope.ServiceProvider.GetServices<IKafkaConsumerLogic>().ToList()
+                .ForEach(consumer => consumer.Dispose());
         }
         catch (Exception ex)
         {
