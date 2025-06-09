@@ -17,6 +17,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Quickstarter.Kafka.Consumer.Core" Version="1.0.1" />
     </ItemGroup>
     
     <!--#if (UseOpenSearch) -->
