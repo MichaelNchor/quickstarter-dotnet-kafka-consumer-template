@@ -99,7 +99,7 @@ Kafka.Consumer
 - Graceful shutdown and cancellation handling
 - Configurable topic subscription and consumer settings
 - Integrated with `IHostedService` for background processing
-- Structured logging using `ILogger`
+- Structured logging using `ILogger` 
 - **Docker-ready** with production-grade `Dockerfile`
 - Follows modern .NET and microservice best practices with service-repository pattern
 - In-built Javascript test producer for local testing
