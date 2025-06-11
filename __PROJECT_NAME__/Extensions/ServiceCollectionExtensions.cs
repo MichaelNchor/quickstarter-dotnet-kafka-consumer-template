@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Extensions;
+namespace __PROJECT_NAME__.Extensions;
 
 public static class ServiceCollectionExtensions
 {

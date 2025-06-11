@@ -1,4 +1,4 @@
-﻿namespace Kafka.Consumer;
+﻿namespace __PROJECT_NAME__;
 
 class Program
 {

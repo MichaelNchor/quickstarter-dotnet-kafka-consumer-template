@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Models;
+namespace __PROJECT_NAME__.Models;
 
 public record BaseEntity
 {

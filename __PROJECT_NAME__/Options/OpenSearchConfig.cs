@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Options;
+namespace __PROJECT_NAME__.Options;
 
 public class OpenSearchConfig
 {
