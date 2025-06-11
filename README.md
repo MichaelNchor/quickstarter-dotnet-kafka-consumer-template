@@ -10,7 +10,7 @@ You can install this template directly from NuGet using the .NET CLI:
 
 ```bash
 # Install the template
-dotnet new install Quickstarter.Kafka.Consumer::2.0.1
+dotnet new install Quickstarter.Kafka.Consumer::2.0.2
 ````
 
 ---
@@ -50,9 +50,6 @@ Kafka.Consumer
 │   └──── main.js
 │   └── main.js
 │
-├── Attributes/              # Custom attributes for consumer discovery
-│   └── ConsumeAttribute.cs
-│
 ├── Consumers/              # Application-specific Kafka message consumers
 │   ├── AccountingConsumer.cs
 │   └── PaymentConsumer.cs
@@ -67,21 +64,11 @@ Kafka.Consumer
 │   └── PaymentMessage.cs
 │
 ├── Options/                # Strongly typed configuration classes
-│   ├── KafkaConsumerConfig.cs
-│   ├── KafkaExtraConfig.cs
 │   └── OpenSearchConfig.cs
-│
-├── Services/               # Core consumer logic and business handling
-│   ├── IKafkaConsumerBase.cs
-│   ├── KafkaConsumerLogic.cs
-│   └── KafkaConsumerLogic.cs
 |
 ├── Repositories/           # Core repositories for data access
 │   ├── IElasticRepository.cs
 │   ├── ElasticRepository.cs
-|
-├── Workers/                # Background service entry point
-│   └── BackgroundRunner.cs
 │
 ├── Dockerfile              # Production-ready Dockerfile
 ├── docker-compose.yml      # Optional: for local Kafka test setup
