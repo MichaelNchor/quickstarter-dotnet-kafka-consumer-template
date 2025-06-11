@@ -1,6 +1,6 @@
 #if UseOpenSearch
 
-namespace Kafka.Consumer.Repositories;
+namespace __PROJECT_NAME__.Repositories;
 
 public class ElasticRepository<T> : IElasticRepository<T> where T : class
 {

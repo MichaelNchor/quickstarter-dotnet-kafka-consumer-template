@@ -6,7 +6,7 @@
     "identity": "Quickstarter.Kafka.Consumer",
     "name": "Quickstarter Kafka Consumer",
     "shortName": "quickstarter-kafka-consumer",
-    "sourceName": "Kafka\\.Consumer",
+    "sourceName": "__PROJECT_NAME__",
     "preferNameDirectory":true,
     "description": "A simple template for creating Kafka consumer project in C#.",
     "tags": {

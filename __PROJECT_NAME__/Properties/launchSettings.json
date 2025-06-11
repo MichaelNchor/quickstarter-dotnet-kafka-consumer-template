@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "Kafka.Consumer": {
+    "__PROJECT_NAME__": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {

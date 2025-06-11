@@ -1,4 +1,4 @@
-namespace Kafka.Consumer.Consumers;
+namespace __PROJECT_NAME__.Consumers;
 
 public class AccountingConsumer : KafkaConsumerBase
 {

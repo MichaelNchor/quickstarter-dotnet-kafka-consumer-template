@@ -2,15 +2,15 @@ global using System.ComponentModel.DataAnnotations;
 global using System.Linq.Expressions;
 global using System.Reflection;
 global using Confluent.Kafka;
-global using Kafka.Consumer.Consumers;
-global using Kafka.Consumer.Extensions;
-global using Kafka.Consumer.Options;
+global using __PROJECT_NAME__.Consumers;
+global using __PROJECT_NAME__.Extensions;
+global using __PROJECT_NAME__.Options;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
-global using Kafka.Consumer.Models;
+global using __PROJECT_NAME__.Models;
 #if UseOpenSearch
-global using Kafka.Consumer.Repositories;
+global using __PROJECT_NAME__.Repositories;
 global using Nest;
 #endif
 global using Microsoft.Extensions.Logging;
